@@ -1,11 +1,12 @@
 from django.test import TestCase
 from django.urls import resolve
-from django.http import HttpRequest
 
-from views import home_page
+from lists.views import home_page
+
+
+#from views import home_page
 
 class HomePageTest(TestCase):
-
     def test_uses_home_template(self):
         '''Тест: использует домашний шаблон'''
         response = self.client.get('/')
