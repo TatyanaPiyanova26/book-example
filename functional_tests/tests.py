@@ -1,3 +1,4 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -5,7 +6,7 @@ import unittest
 import time
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 	'''Тест нового посетителя'''
 	def setUp(self):
 		'''установка'''
@@ -26,7 +27,7 @@ class NewVisitorTest(unittest.TestCase):
 		'''тест: можно начать список и получить его позже'''
 		# Эдит слышала про крутон новое онлайн-приложение со списком неотложных дел
 		# Она решает оценить его домашнюю страницу
-		self.browser.get('http://localhost:8000')
+		self.browser.get(self.live_server_url)
 
 		# Она видит что заголовок и шапка страницы говорят о списказ неотложных дел
 		self.assertIn('To-Do', self.browser.title)
@@ -71,6 +72,6 @@ class NewVisitorTest(unittest.TestCase):
 		# Удовлетворенная, она снова ложится спать
 
 
-if __name__ == '__main__':
-	unittest.main(warnings='ignore')
+# if __name__ == '__main__':
+# 	unittest.main(warnings='ignore')
  
