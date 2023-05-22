@@ -100,7 +100,9 @@ class NewVisitorTest(LiveServerTestCase):
 		# Мы мспользуем новый сеанс браузера, тем самым обеспечивая, чтобы никакая
 		# информация от Эдит не прошла через данные cookie и пр.
 		self.browser.quit()
-		self.browser = webdriver.Firefox()
+		options = Options()
+		options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+		self.browser = webdriver.Firefox(options='options')
 
 		# Френсис посещает домашнюю страницу. Нет никаких признаков списка Эдит
 		self.browser.get(self.live_server_url)
