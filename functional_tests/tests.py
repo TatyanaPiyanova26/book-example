@@ -76,7 +76,7 @@ class NewVisitorTest(LiveServerTestCase):
 		#Эдит интересно, запомнит ли сайт её список. Далее она видит,
 		# что сайт сгенерировал для неё уникальный URL-адрес - об этом выводится
 		# небольшой текст с объяснениями
-		self.fail('Закончить тест!')
+		# self.fail('Закончить тест!')
 		# Она посещает этот URL-адрес - её списое по-прежнему там
 
 		# Удовлетворенная, она снова ложится спать
@@ -100,14 +100,16 @@ class NewVisitorTest(LiveServerTestCase):
 		# Мы мспользуем новый сеанс браузера, тем самым обеспечивая, чтобы никакая
 		# информация от Эдит не прошла через данные cookie и пр.
 		self.browser.quit()
+		# options = Options()
+		# options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
 		options = Options()
 		options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
-		self.browser = webdriver.Firefox(options='options')
+		self.browser = webdriver.Firefox(options=options)
 
 		# Френсис посещает домашнюю страницу. Нет никаких признаков списка Эдит
 		self.browser.get(self.live_server_url)
 		page_text = self.browser.find_element_by_tag_name('body').text
-		self.assertIn('Купить павлиньи перья', page_text)
+		self.assertNotIn('Купить павлиньи перья', page_text)
 		self.assertNotIn('Сделать мушку', page_text)
 
 		# Френсис начинает новый список, вводя новый элемент. Он менее
@@ -126,6 +128,31 @@ class NewVisitorTest(LiveServerTestCase):
 		page_text = self.browser.find_element_by_tag_name('body').text
 		self.assertNotIn('Купить павлиньи перья', page_text)
 		self.assertIn('Купить молоко', page_text)
+
+	def test_layout_and_styling(self):
+		'''Тест макета и стилевого оформления'''
+		# Эдит открывает домашнюю страницу
+		self.browser.get(self.live_server_url)
+		self.browser.set_window_size(1024, 768)
+
+		# Он замечает что поле ввода аккуратно центрировано
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		self.assertAlmostEqual(
+			inputbox.location['x'] + inputbox.size['width']/2,
+			512,
+			delta=10
+		)
+
+		#Она начинает новый список и видит, что поле ввода там тоже аккуратно центрировано
+		inputbox.send_keys('testing')
+		inputbox.send_keys(Keys.ENTER)
+		self.wait_for_row_in_list_table('1: testing')
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		self.assertAlmostEqual(
+			inputbox.location['x'] + inputbox.size['width'] / 2,
+			512,
+			delta=10
+		)
 
 		# Удовлетворенные, они оба ложатся спать
 
