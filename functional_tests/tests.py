@@ -1,4 +1,4 @@
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.keys import Keys
@@ -8,7 +8,7 @@ import time
 
 MAX_WAIT = 10
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 	'''Тест нового посетителя'''
 	def setUp(self):
 		'''установка'''
@@ -18,6 +18,7 @@ class NewVisitorTest(LiveServerTestCase):
 
 	def tearDown(self):
 		'''демонтаж'''
+		self.browser.refresh()
 		self.browser.quit()
 
 	def wait_for_row_in_list_table(self, row_text):
