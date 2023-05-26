@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -15,10 +17,13 @@ class NewVisitorTest(StaticLiveServerTestCase):
 		options = Options()
 		options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
 		self.browser = webdriver.Firefox(options=options)
+		staging_server = os.environ.get('STAGING_SERVER')
+		if staging_server:
+			self.live_server_url = 'http://' + staging_server
 
 	def tearDown(self):
 		'''демонтаж'''
-		self.browser.refresh()
+		# self.browser.refresh()
 		self.browser.quit()
 
 	def wait_for_row_in_list_table(self, row_text):
@@ -101,8 +106,6 @@ class NewVisitorTest(StaticLiveServerTestCase):
 		# Мы мспользуем новый сеанс браузера, тем самым обеспечивая, чтобы никакая
 		# информация от Эдит не прошла через данные cookie и пр.
 		self.browser.quit()
-		# options = Options()
-		# options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
 		options = Options()
 		options.binary_location = r'C:\Program Files\Mozilla Firefox\firefox.exe'
 		self.browser = webdriver.Firefox(options=options)
